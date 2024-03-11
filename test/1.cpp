@@ -1,4 +1,14 @@
-#include "src.hpp"
+/*
+valgrind --log-file=valReport --leak-check=full --show-reachable=yes --leak-resolution=low --exit-on-first-error=yes --error-exitcode=250 1.exe
+
+   '--tool=memcheck',
+    '--leak-check=full',
+    '--exit-on-first-error=yes',
+    f'--error-exitcode=250',
+    '--quiet',
+*/
+
+#include "../lru/src.hpp"
 #if defined (_UNORDERED_MAP_)  || (defined (_LIST_)) || (defined (_MAP_)) || (defined (_SET_)) || (defined (_UNORDERED_SET_))||(defined (_GLIBCXX_MAP)) || (defined (_GLIBCXX_UNORDERED_MAP))
 BOOM :)
 #endif
@@ -7,7 +17,7 @@ BOOM :)
 #include <string>
 // if this is 1, output yes or no
 //otherwise, output the exact num
-#define STATUS 0
+#define STATUS 1
 
 std::string c[]={
     "   pass!",
@@ -33,6 +43,7 @@ void integer_hashmap_memcheck_tester(){
     using value_type = sjtu::pair<int,int>;
     using mp = sjtu::hashmap<int,int>;
     const int n = 100000;
+    std::cerr << "TEST LINE 36" << std::endl;
     // test: constructor
     if(STATUS)std::cout<<c[2];
     mp map;
@@ -54,7 +65,7 @@ void integer_hashmap_memcheck_tester(){
         map.remove(i);
     }
     if(STATUS)std::cout<<c[0]<<std::endl;
-
+    std::cerr << "TEST LINE 58" << std::endl;
     //test: find
     if(STATUS)std::cout<<c[5];
     for(int i=0;i<n;i++){
@@ -84,10 +95,12 @@ void integer_hashmap_memcheck_tester(){
     }
     if(STATUS)std::cout<<c[0]<<std::endl;
 
+    std::cerr << "TEST LINE 88" << std::endl;
     //test: constructor(), =
     if(STATUS)std::cout<<c[8];
     mp map2(map);
     map2.clear();
+    std::cerr << "TEST LINE 93" << std::endl;
     map2 = map;
     for(int i=0;i<n;i++){
         mp::iterator it = map2.find(i);
@@ -111,7 +124,7 @@ void integer_hashmap_memcheck_tester(){
         }
     }
     if(STATUS)std::cout<<c[0]<<std::endl;
-
+    std::cerr << "TEST LINE 117" << std::endl;
     //test: clear
     if(STATUS)std::cout<<c[6];
     map.clear();

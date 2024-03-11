@@ -1,4 +1,4 @@
-#include "src.hpp"
+#include "../lru/src.hpp"
 #if defined (_UNORDERED_MAP_)  || (defined (_LIST_)) || (defined (_MAP_)) || (defined (_SET_)) || (defined (_UNORDERED_SET_))||(defined (_GLIBCXX_MAP)) || (defined (_GLIBCXX_UNORDERED_MAP))
 BOOM :)
 #endif
@@ -52,50 +52,56 @@ void tiny_linked_hashmap_tester(){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 55\n" << std::endl;
     try{
         map.begin()--;
     }catch(...){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 62\n" << std::endl;
     try{
         map.cbegin()--;
     }catch(...){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 69\n" << std::endl;
     try{
         map.end()++;
     }catch(...){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 76\n" << std::endl;
     try{
         map.cend()++;
     }catch(...){
         flag = true;
     }
     check(flag);
-
+    std::cerr << "GOOD 83\n" << std::endl;
     try{
         *(map.end());
     }catch(...){
         flag = true;
     }
     check(flag);
-
+    std::cerr << "GOOD 90\n" << std::endl;
     try{
         *(map.cend());
     }catch(...){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 97\n" << std::endl;
     try{
         map.at(map.size());
     }catch(...){
         flag = true;
     }
     check(flag);
+    std::cerr << "GOOD 104\n" << std::endl;
     try{
         map[map.size()];
     }catch(...){

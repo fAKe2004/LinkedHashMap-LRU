@@ -1,13 +1,16 @@
-#include "src.hpp"
+#include "../lru/src.hpp"
 #if defined (_UNORDERED_MAP_)  || (defined (_LIST_)) || (defined (_MAP_)) || (defined (_SET_)) || (defined (_UNORDERED_SET_))||(defined (_GLIBCXX_MAP)) || (defined (_GLIBCXX_UNORDERED_MAP))
 BOOM :)
 #endif
 #include <iostream>
 #include <cassert>
 #include <string>
+
+#include <set>
+
 // if this is 1, output yes or no
 //otherwise, output the exact num
-#define STATUS 0
+#define STATUS 1
 
 std::string c[]={
     "   pass!",

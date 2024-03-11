@@ -1,4 +1,8 @@
-#include "src.hpp"
+/*
+valgrind --log-file=valReport --leak-check=full --show-reachable=yes --leak-resolution=low ./4
+*/
+
+#include "../lru/src.hpp"
 #if defined (_UNORDERED_MAP_)  || (defined (_LIST_)) || (defined (_MAP_)) || (defined (_SET_)) || (defined (_UNORDERED_SET_))||(defined (_GLIBCXX_MAP)) || (defined (_GLIBCXX_UNORDERED_MAP))
 BOOM :)
 #endif
@@ -8,7 +12,7 @@ BOOM :)
 
 // if this is 1, output yes or no
 //otherwise, output the exact num
-#define STATUS 0
+#define STATUS 1
 
 std::string c[]={
     "   pass!",
@@ -34,11 +38,22 @@ bool equal(int a,int b){
 void simple_linked_hashmap_tester(){
     using value_type = sjtu::pair<int,int>;
     using mp = sjtu::linked_hashmap<int,int>;
-    const int n = 100;
+    // const int n = 100;
+    const int n = 10;
+
     // test: constructor
     if(STATUS)std::cout<<c[2];
     mp map;
     if(STATUS)std::cout<<c[0]<<std::endl;
+
+    // PRINT TEST
+    auto PRINT = [&map]() {
+        puts("PRINT TEST");
+        for (auto item : map) {
+            std::cout << item.first << " " << item.second << std::endl;
+        }
+        puts("END OF PRINT TEST");
+    };
 
     //test: insert,remove and expand
     if(STATUS)std::cout<<c[3];
@@ -46,6 +61,8 @@ void simple_linked_hashmap_tester(){
         map.insert(value_type(i,i));
     }
     if(STATUS)std::cout<<std::endl<<c[4];//test remove
+
+    PRINT();
 
     for(mp::iterator it = map.begin();it!=map.end();it++){
 	    mp::iterator tmpit = it;
@@ -61,10 +78,11 @@ void simple_linked_hashmap_tester(){
     }
 
     for(int i=0;i<n;i+=4){
-        map.insert(value_type(i,4*i));
+        map.insert(value_type(i,4*i)); // insert i 4 * i n = 100
     }
     if(STATUS)std::cout<<c[0]<<std::endl;
 
+    PRINT();
     //test: counter
 
     int ct = 0;
@@ -72,6 +90,10 @@ void simple_linked_hashmap_tester(){
         ct += map.count(i);
     }
     if(STATUS)std::cout<<"test: count:"<<ct<<std::endl;
+
+    // ERROR
+
+    PRINT();
 
     //test: iterator
     mp::iterator it = map.begin();
@@ -91,6 +113,8 @@ void simple_linked_hashmap_tester(){
     const_iter = map.cbegin();
     if(STATUS)std::cout<<c[0]<<std::endl;
 
+    std::cerr << " POSSIBLE ERROR POINT " << std::endl;
+    
     //test: find
     if(STATUS)std::cout<<c[5];
     for(int i=0;i<n;i++){
@@ -107,6 +131,11 @@ void simple_linked_hashmap_tester(){
         }
         else if (i % 4 == 0){
             if(!equal(4*i,(*it).second)){
+                try {
+                    std::cerr << "\nWRONG ON " << i <<"  " << it->first << " " << it->second << std::endl;
+                } catch (...) {
+                    std::cerr << "ERROR";
+                }
                 std::cout<<c[1]<<std::endl;
                 exit(0);
             }
@@ -122,7 +151,9 @@ void simple_linked_hashmap_tester(){
 
     //test: constructor(), =
     if(STATUS)std::cout<<c[8];
-    mp map2(map);
+
+    // mp map2(map);
+    mp map2;
     //map2.clear();
     map2 = map;
     
