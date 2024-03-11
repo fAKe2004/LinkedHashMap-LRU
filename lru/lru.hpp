@@ -479,6 +479,7 @@ public:
 		if (it == iterator())
 			return false;
 		it.lst_->erase(it.it_);
+		size_--;
 		return true;
 	}
 
@@ -866,13 +867,14 @@ public:
 	 * throw 
 	*/
 	void remove(iterator pos) {
-		if (pos.lst_ != LST_ || pos.it_ == LST_->end())	
+		if (pos.lst_ != &LST_ || pos.it_ == LST_.end())	
 			throw "remove : not corresponding iterator";
-		aux_iterator it = find_basic(*pos);
+		aux_iterator it = find_basic(pos->first);
 		if (it == aux_iterator())
 			throw "remove : shouldn't happen";
 		LST_.erase(pos.it_); // it.it_ is a iterator of 
 		it.lst_->erase(it.it_);
+		size_--;
 		return;
 	}
 	/**
@@ -901,8 +903,10 @@ public:
 class lru{
     using lmap = sjtu::linked_hashmap<Integer,Matrix<int>,Hash,Equal>;
     using value_type = sjtu::pair<const Integer, Matrix<int> >;
+		int size_limit_;
+		lmap mp_;
 public:
-    lru(int size){
+    lru(int size) : size_limit_(size), mp_(size / lmap::load_factor + 1) {
     }
     ~lru(){
     }
@@ -910,12 +914,21 @@ public:
      * save the value_pair in the memory
      * delete something in the memory if necessary
     */
-    void save(const value_type &v) const{
-    }
+    void save(const value_type &v) {
+			mp_.insert(v);
+    	while (mp_.size() > size_limit_)
+				mp_.remove(mp_.begin());
+		}
     /**
      * return a pointer contain the value
+		 * btw 查询也是算作一次访问，要把其提到队列开头
     */
-    Matrix<int>* get(const Integer &v) const{
+    Matrix<int>* get(const Integer &v) {
+			auto it = mp_.find(v);
+			if (it == mp_.end())
+				return nullptr;
+			mp_.insert(value_type(v, it->second));
+			return &(it->second);
     }
     /**
      * just print everything in the memory
@@ -924,7 +937,14 @@ public:
      * change the order.
     */
     void print(){
-    }
+			lmap::iterator it;
+			// size_t print_count = 0;
+			for (const auto& item: mp_) {
+				std::cout << item.first.val << " " << item.second << std::endl;
+				// print_count++;
+			}
+			// std::cerr << print_count << std::endl;
+		}
 };
 }
 

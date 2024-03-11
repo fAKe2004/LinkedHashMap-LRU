@@ -10,7 +10,7 @@ BOOM :)
 
 // if this is 1, output yes or no
 //otherwise, output the exact num
-#define STATUS 1
+#define STATUS 0
 
 std::string c[]={
     "   pass!",

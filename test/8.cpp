@@ -30,14 +30,20 @@ std::string c[]={
 };
 
 void simple_lru_tester(){
+    try {
     using value_type = sjtu::pair<Integer,Matrix<int> >;
     sjtu::lru tester(100);
     const int n=10000;
     for(int i=0;i<n;i++){
-        tester.save(value_type( Integer(i),Matrix<int>(2,2,i)));
-        tester.get(Integer(i-(i%99)));
+        tester.save(value_type( Integer(i),Matrix<int>(2,2,i))); // i 
+        tester.get(Integer(i-(i%99))); // 
     }
     tester.print();
+    } catch (char const* s) {
+        printf("ERR : %s\n", s);
+    } catch (...) {
+        printf("Unknown err\n");
+    }
 }
 
 int main(){
